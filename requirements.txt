@@ -1,0 +1,11 @@
+torch
+torchvision
+torchaudio
+numpy
+pillow
+tqdm
+opencv-python
+faiss-cpu
+flask
+transformers
+sentence-transformers
