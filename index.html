@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Floor Plan Designer</title>
+</head>
+
+<body>
+  <div id="app-container">
+    <div id="canvas-container">
+      <canvas id="canvas"></canvas>
+      <canvas id="grid" class="grid"></canvas>
+
+      <!-- Furniture Selector Panel -->
+      <div class="panel furniture-selector">
+        <div class="panel-header" onclick="toggleFurniturePanel()">
+          <h3><i class="fas fa-couch"></i> Furniture Library <i class="fas fa-chevron-down collapse-icon"></i></h3>
+          <select id="furniture-select" class="styled-select">
+            <option value="chairs">Chairs</option>
+            <option value="bed">Beds</option>
+            <option value="couch">Couches</option>
+            <option value="table">Tables</option>
+            <option value="cabinet">Cabinets</option>
+            <option value="wheels">Wheels</option>
+          </select>
+        </div>
+        <div class="panel-content">
+          <div class="thumbnail-grid" id="furniture-thumbnails">
+            <!-- Thumbnails will be dynamically loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Toolbar -->
+      <div class="toolbar">
+        <div class="tool-group">
+          <select id="tool" class="styled-select">
+            <option value="pencil">Pencil</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="circle">Circle</option>
+            <option value="line">Line</option>
+            <option value="eraser">Eraser</option>
+          </select>
+        </div>
+
+        <div class="tool-group">
+          <label for="color">Color:</label>
+          <input type="color" id="color" value="#0000000" class="color-picker">
+        </div>
+
+        <div class="tool-group">
+          <label for="size">Size:</label>
+          <input type="number" id="size" value="3" min="1" max="20" class="size-input">
+        </div>
+
+        <div class="tool-divider"></div>
+
+        <div class="tool-group action-buttons">
+          <button class="tool-btn" onclick="enableSelection()" title="Select" id="select-btn">
+            <i class="fas fa-mouse-pointer"></i>
+          </button>
+          <button class="tool-btn" onclick="undo()" title="Undo">
+            <i class="fas fa-undo"></i>
+          </button>
+          <button class="tool-btn" onclick="redo()" title="Redo">
+            <i class="fas fa-redo"></i>
+          </button>
+          <button class="tool-btn btn-danger" onclick="clearCanvas()" title="Clear">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+        <div class="tool-divider"></div>
+
+        <div class="tool-group">
+          <button class="tool-btn" onclick="saveCanvas()" title="Save">
+            <i class="fas fa-save"></i>
+          </button>
+          <button class="tool-btn" onclick="zoomIn()" title="Zoom In">
+            <i class="fas fa-search-plus"></i>
+          </button>
+          <button class="tool-btn" onclick="zoomOut()" title="Zoom Out">
+            <i class="fas fa-search-minus"></i>
+          </button>
+          <button class="tool-btn" id="auto-join-btn" title="Auto Join">
+            <i class="fas fa-link"></i>
+          </button>
+        </div>
+
+        <div class="tool-divider"></div>
+
+        <div class="tool-group file-upload">
+          <label for="fileInput" class="upload-btn">
+            <i class="fas fa-upload"></i> Upload
+            <input type="file" id="fileInput" accept="image/*" />
+          </label>
+          <button class="tool-btn" onclick="uploadImage()"><i class="fas fa-check"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  <script>
+    function toggleFurniturePanel() {
+      const panel = document.querySelector('.furniture-selector');
+      const content = document.querySelector('.panel-content');
+      const icon = document.querySelector('.collapse-icon');
+      
+      content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      panel.classList.toggle('collapsed');
+      icon.classList.toggle('fa-chevron-down');
+      icon.classList.toggle('fa-chevron-up');
+    }
+  </script>
+</body>
+</html>

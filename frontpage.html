@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FurniFind | Smart Furniture Search</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #f5f7fa;
+      --accent: #f7b731;
+      --accent2: #44bd32;
+      --primary-light: #fff;
+      --card-bg: #fffdfa;
+      --card-hover: #f9f5ed;
+      --search-bg: #fff;
+      --input-bg: #f7f9fa;
+      --input-border: #e1e5ea;
+      --btn-primary: #44bd32;
+      --btn-primary-hover: #2d8642;
+      --mic-bg: #f7b731;
+      --mic-hover-bg: #ffeaa7;
+      --rs-color: #f7b731;
+      --text-main: #243245;
+      --text-light: #8a99b2;
+      --footer-bg: #f5f7fa;
+      --feature1: linear-gradient(120deg, #fffbe6 0%, #f7e6d6 100%);
+      --feature2: linear-gradient(120deg, #e0f6ef 0%, #eaf6fd 100%);
+      --feature1-hover: linear-gradient(120deg, #fff3ba 0%, #ffe0bf 100%);
+      --feature2-hover: linear-gradient(120deg, #c2f3df 0%, #d6f1fe 100%);
+      --pulse-shadow: 0 0 8px 2px #f7b73160;
+    }
+    html, body {
+      min-height: 100vh;
+      height: 100%;
+      background: var(--primary-bg);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
+      position: relative;
+    }
+    body:before {
+      content: '';
+      position: fixed;
+      z-index: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      opacity: 0.13;
+      pointer-events: none;
+      filter: blur(0.5px);
+    }
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      background: transparent;
+      padding: 20px 0 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      transition: color 0.22s;
+      position: relative;
+      z-index: 2;
+    }
+    .logo:hover { color: var(--btn-primary); }
+    .logo-svg {
+      width: 52px;
+      height: 52px;
+      display: block;
+      filter: drop-shadow(0 4px 16px #f7b73133);
+      animation: logoPulse 2s infinite alternate;
+    }
+    @keyframes logoPulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+    .hero {
+      padding: 60px 0 25px 0;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.15rem;
+      color: var(--btn-primary);
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 12px #f7b73123;
+      animation: fadeInDown 1.2s ease;
+    }
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .tagline {
+      font-size: 1.15rem;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      color: var(--text-light);
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 1.3s 0.2s both;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .feature-cards-row {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-bottom: 38px;
+      animation: fadeIn 1.5s 0.2s both;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .feature-box {
+      flex: 1 1 0;
+      min-width: 220px;
+      max-width: 330px;
+      background: var(--feature1);
+      color: #665e4c;
+      border-radius: 16px;
+      padding: 32px 30px 26px 30px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 4px 24px 0 #f7b73125;
+      border: 2px solid #f9e6bb;
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.18s, background 0.19s, border 0.16s, color 0.18s;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      opacity: 0.98;
+    }
+    .feature-box:nth-child(2) {
+      background: var(--feature2);
+      color: #287271;
+      border-color: #b6e4da;
+      box-shadow: 0 4px 24px 0 #44bd3212;
+    }
+    .feature-box:hover, .feature-box:focus {
+      opacity: 1;
+      transform: translateY(-10px) scale(1.025) rotate(-1deg);
+      box-shadow: 0 8px 44px 0 #f7b73155, 0 2px 16px #44bd3230;
+      border: 2px solid var(--btn-primary);
+      background: var(--feature1-hover);
+      color: #443a16;
+      z-index: 2;
+    }
+    .feature-box:nth-child(2):hover, .feature-box:nth-child(2):focus {
+      background: var(--feature2-hover);
+      color: #237355;
+    }
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 13px;
+      display: block;
+      width: 48px;
+      height: 48px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: iconWobble 2.5s infinite alternate;
+    }
+    @keyframes iconWobble {
+      0% { transform: rotate(-3deg); }
+      100% { transform: rotate(3deg); }
+    }
+    .feature-title {
+      font-size: 1.04rem;
+      margin-bottom: 7px;
+      font-weight: 700;
+      color: inherit;
+      text-shadow: 0 1px 8px #fff1;
+    }
+    .feature-desc {
+      font-size: 1.01rem;
+      color: inherit;
+      opacity: 0.91;
+      line-height: 1.5;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+    .search-option.active {
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      animation: fadeIn 1.5s 0.2s both;
+    }
+    .search-input-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: var(--search-bg);
+      border-radius: 15px;
+      box-shadow: 0 2px 16px #b1b2b319;
+      min-height: 56px;
+      overflow: hidden;
+      border: 1.3px solid var(--input-border);
+      transition: box-shadow 0.18s;
+    }
+    .search-input-container:focus-within {
+      box-shadow: 0 4px 18px #44bd3235;
+    }
+    .search-input {
+      flex: 1;
+      padding: 0 22px;
+      font-size: 1.08rem;
+      background: var(--input-bg);
+      color: var(--text-main);
+      border: none;
+      outline: none;
+      font-family: inherit;
+      height: 56px;
+      border-radius: 15px 0 0 15px;
+      transition: background 0.16s;
+    }
+    .search-input::placeholder {
+      color: var(--text-light);
+      opacity: 0.95;
+    }
+    .mic-btn, .search-btn {
+      border: none;
+      height: 56px;
+      width: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: none;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s, filter 0.14s;
+      position: relative;
+      z-index: 1;
+    }
+    .mic-btn {
+      background: var(--mic-bg);
+      color: #fff;
+      border-right: 1px solid var(--input-border);
+      border-radius: 0;
+      box-shadow: 0 1px 6px #f7b73130;
+      outline: none;
+    }
+    .mic-btn:focus, .mic-btn:active {
+      outline: 2px solid var(--btn-primary);
+      filter: drop-shadow(0 0 8px #f7b731cc);
+    }
+    .mic-btn:not(.recording):hover {
+      background: var(--mic-hover-bg);
+      color: var(--mic-bg);
+      filter: brightness(1.09);
+    }
+    .mic-btn.recording {
+      animation: micPulse 1.15s infinite alternate;
+      box-shadow: var(--pulse-shadow);
+      background: #fff;
+      color: var(--mic-bg);
+      filter: brightness(1.18) drop-shadow(0 0 10px #f7b731cc);
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 #f7b73130; }
+      100% { box-shadow: 0 0 16px 8px #f7b73160; }
+    }
+    .mic-btn svg {
+      width: 26px;
+      height: 26px;
+      transition: filter 0.12s;
+      filter: drop-shadow(0 0 2px #fff7);
+      display: block;
+    }
+    .mic-btn.recording svg {
+      filter: drop-shadow(0 0 8px #f7b731cc);
+    }
+    .search-btn {
+      background: var(--btn-primary);
+      color: #fff;
+      border-radius: 0 15px 15px 0;
+      font-weight: bold;
+      font-size: 1.3rem;
+      transition: background 0.17s, box-shadow 0.17s;
+      box-shadow: 0 1px 7px #44bd3228;
+    }
+    .search-btn:hover, .search-btn:focus {
+      background: var(--btn-primary-hover);
+      color: #fff;
+      box-shadow: 0 4px 16px #44bd3244;
+    }
+    .results-wrapper {
+      background: transparent;
+      min-height: 440px;
+      padding: 40px 0 120px;
+    }
+    .filter-panel {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+      margin-bottom: 22px;
+      border: none;
+    }
+    .filter-toggle-btn {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 20px;
+      background: var(--search-bg);
+      border-radius: 12px;
+      color: var(--text-light);
+      border: 1.2px solid var(--input-border);
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 13px;
+      cursor: pointer;
+    }
+    .filter-toggle-btn:hover { color: var(--btn-primary); }
+    .filter-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 17px 8px 8px;
+      background: var(--input-bg);
+      border-radius: 11px;
+      border: 1px solid var(--input-border);
+      margin-bottom: 15px;
+    }
+    .filter-group label, .filter-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--btn-primary);
+    }
+    .filter-select, .price-input {
+      padding: 11px 13px;
+      border-radius: 7px;
+      font-size: 0.99rem;
+      background: var(--search-bg);
+      color: var(--text-main);
+      border: 1px solid var(--input-border);
+      margin-top: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .filter-select:focus, .price-input:focus {
+      border-color: var(--btn-primary);
+      box-shadow: 0 0 5px var(--btn-primary);
+      outline: none;
+    }
+    .price-range {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--search-bg);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--input-border);
+    }
+    .price-range span {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+    .price-input {
+      width: 100px;
+      background: var(--primary-light);
+      border-radius: 6px;
+      text-align: center;
+    }
+    .price-input::-webkit-outer-spin-button,
+    .price-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .price-input[type=number] { -moz-appearance: textfield; }
+    .filter-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 7px;
+    }
+    .filter-btn {
+      padding: 10px 19px;
+      border-radius: 8px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      background: var(--btn-primary);
+      color: #fff;
+      transition: background 0.14s;
+    }
+    .filter-btn:hover { background: var(--btn-primary-hover); }
+    .reset-btn {
+      background: #fff;
+      color: var(--btn-primary);
+      border: 1px solid var(--btn-primary);
+    }
+    .reset-btn:hover {
+      background: #f7f9fa;
+      color: var(--accent2);
+      border-color: var(--accent2);
+    }
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .results-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--btn-primary);
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 6px #f7b73112;
+    }
+    .results-count {
+      color: var(--btn-primary);
+      font-size: 1rem;
+    }
+    .results-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      justify-content: flex-start;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px -4px #ddcfa7cc;
+      width: calc(25% - 22px);
+      min-width: 200px;
+      max-width: 280px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s, box-shadow 0.18s, background 0.24s;
+      border: 1.5px solid #f0e9d2;
+      position: relative;
+      animation: cardPop 0.8s both;
+    }
+    @keyframes cardPop {
+      0% { opacity: 0; transform: scale(0.96) translateY(18px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .product-card:hover {
+      background: var(--card-hover);
+      transform: translateY(-8px) scale(1.018);
+      box-shadow: 0 12px 34px -2px #f7b73133, 0 2px 12px #44bd3233;
+      border-color: var(--btn-primary);
+    }
+    .product-image {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      background: #f7f9fa;
+      border-bottom: 1.5px solid #f3eacc;
+      transition: filter 0.11s;
+    }
+    .product-card:hover .product-image {
+      filter: brightness(1.07) drop-shadow(0 2px 8px #f7b73119);
+    }
+    .product-info {
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1 1 0;
+      min-height: 70px;
+    }
+    .product-name {
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 1.02rem;
+      color: var(--accent2);
+      letter-spacing: 0.2px;
+    }
+    .product-price {
+      font-weight: 800;
+      color: var(--rs-color);
+      font-size: 1.13rem;
+      letter-spacing: 0.7px;
+      margin-bottom: 4px;
+      margin-top: 4px;
+      text-shadow: 0 1px 6px #f7b73113;
+    }
+    .ar-button {
+      display: none;
+      padding: 8px 12px;
+      margin: 8px auto 4px;
+      background: var(--btn-primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .ar-button.visible { display: block; }
+    .ar-button:hover {
+      background: var(--btn-primary-hover);
+      transform: scale(1.05);
+    }
+    .no-results {
+      text-align: center;
+      padding: 32px;
+      font-size: 1.01rem;
+      color: var(--text-light);
+      background: transparent;
+      border-radius: 10px;
+      box-shadow: none;
+      width: 100%;
+    }
+    .recording-indicator {
+      display: none;
+      position: fixed;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--mic-bg);
+      color: white;
+      padding: 13px 28px;
+      border-radius: 14px;
+      font-size: 1.08rem;
+      z-index: 1000;
+      animation: micGlow 1.2s infinite alternate;
+      box-shadow: 0 8px 32px #f7b73144;
+    }
+    @keyframes micGlow {
+      0% { box-shadow: 0 0 0 0 #f7b73130; }
+      100% { box-shadow: 0 0 16px 8px #f7b73160; }
+    }
+    .loader {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border: 4px solid #f7b73133;
+      border-bottom-color: var(--btn-primary);
+      border-radius: 50%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      animation: rotation 1s linear infinite;
+    }
+    @keyframes rotation {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .qr-popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .qr-popup-overlay.active { display: flex; }
+    .qr-popup {
+      background: var(--primary-light);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .qr-popup img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .popup-close:hover { color: var(--btn-primary); }
+    .footer {
+      background: var(--footer-bg);
+      color: var(--text-light);
+      padding: 18px 0 6px 0;
+      text-align: center;
+      font-size: 1.01rem;
+      margin-top: 40px;
+      border-top: 3px solid var(--btn-primary);
+      position: relative;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s;
+      z-index: 50;
+    }
+    .footer.footer-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .footer-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+      color: var(--btn-primary);
+    }
+    .footer-tagline {
+      font-size: 1.01rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    .footer-links {
+      margin-bottom: 4px;
+    }
+    .footer a {
+      color: var(--rs-color);
+      text-decoration: underline;
+      margin: 0 7px;
+      font-weight: 500;
+      font-size: 0.97em;
+    }
+    .footer a:hover {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .footer-copy {
+      font-size: 0.89rem;
+      color: #b5b1c3;
+    }
+    @media (max-width: 1200px) { .product-card { width: calc(33.333% - 18px); } }
+    @media (max-width: 992px) {
+      .product-card { width: calc(50% - 10px); }
+      .hero-title { font-size: 2.1rem; }
+      .feature-cards-row { gap: 18px; }
+    }
+    @media (max-width: 768px) {
+      .hero { padding: 32px 0; }
+      .hero-title { font-size: 1.25rem; }
+      .tagline { font-size: 1.01rem; }
+      .filter-controls { grid-template-columns: 1fr; }
+      .results-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .product-card { width: 100%; }
+      .feature-cards-row { flex-direction: column; gap: 13px; }
+      .footer { padding: 10px 0 6px; }
+    }
+    @media (max-width: 576px) {
+      .product-card { width: 100%; }
+      .logo { font-size: 1.2rem; }
+      .search-input-container { min-height: 40px; }
+      .mic-btn, .search-btn { height: 40px; width: 40px; }
+      .footer { padding: 10px 0 6px; }
+      .price-range { flex-wrap: wrap; }
+      .price-input { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">
+          <svg class="logo-svg" viewBox="0 0 64 64" fill="none">
+            <rect x="6" y="46" width="52" height="10" rx="5" fill="#f7b731"/>
+            <rect x="13" y="18" width="38" height="24" rx="8" fill="#fff5e1" stroke="#44bd32" stroke-width="3"/>
+            <rect x="22" y="8" width="20" height="14" rx="7" fill="#44bd32" stroke="#f7b731" stroke-width="2"/>
+            <rect x="28" y="34" width="8" height="12" rx="4" fill="#44bd32"/>
+          </svg>
+          <span>FurniFind</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Find Your Perfect Furniture</h1>
+        <p class="tagline">Discover your ideal furniture pieces with our AI-powered search – just describe what you want!</p>
+        <div class="feature-cards-row">
+          <div class="feature-box" onclick="window.location.href='/home'">
+            <div class="feature-icon">
+              <svg width="48" height="48" fill="none" stroke="#f7b731" stroke-width="2">
+                <rect x="10" y="24" width="28" height="12" rx="5" fill="#fffbe6" stroke="#f7b731"/>
+                <rect x="16" y="13" width="16" height="13" rx="6" fill="#fff" stroke="#f7b731" stroke-width="1.8"/>
+                <rect x="22" y="34" width="4" height="8" rx="2" fill="#fffbe6"/>
+              </svg>
+            </div>
+            <div class="feature-title">Sketch & Search</div>
+            <div class="feature-desc">Draw a rough sketch and instantly search for similar furniture.</div>
+          </div>
+          <div class="feature-box" onclick="window.location.href='design.html'">
+            <div class="feature-icon">
+              <svg width="48" height="48" fill="none" stroke="#44bd32" stroke-width="2">
+                <rect x="8" y="25" width="32" height="14" rx="5" fill="#eaf6fd" stroke="#44bd32"/>
+                <rect x="17" y="12" width="14" height="13" rx="6" fill="#fff" stroke="#44bd32" stroke-width="1.8"/>
+                <rect x="22" y="34" width="4" height="8" rx="2" fill="#eaf6fd"/>
+              </svg>
+            </div>
+            <div class="feature-title">Design Your Room</div>
+            <div class="feature-desc">Arrange your dream home and discover matching furniture products.</div>
+          </div>
+        </div>
+        <div class="search-option active">
+          <div class="search-input-container">
+            <input type="text" id="textInput" class="search-input" placeholder="Describe the furniture you're looking for...">
+            <button class="mic-btn" id="micBtn" aria-label="Voice Search">
+              <svg viewBox="0 0 32 32" fill="none" stroke="#f7b731" stroke-width="2">
+                <circle cx="16" cy="16" r="13" stroke="#44bd32" stroke-width="2.7" fill="#f7b731"/>
+                <rect x="12" y="9" width="8" height="14" rx="4" fill="#fff" stroke="#44bd32"/>
+                <rect x="15" y="23" width="2" height="3" rx="1" fill="#f7b731" stroke="#44bd32"/>
+                <line x1="16" y1="26" x2="16" y2="29" stroke="#44bd32" stroke-width="2"/>
+              </svg>
+            </button>
+            <button class="search-btn" id="searchBtn" aria-label="Search">
+              <svg width="28" height="28" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 20 20">
+                <circle cx="9" cy="9" r="7"/>
+                <line x1="15" y1="15" x2="19" y2="19"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="resultsSection" class="results-wrapper" style="display: none;">
+    <div class="container">
+      <div class="filter-panel">
+        <button class="filter-toggle-btn" id="filterToggleBtn">
+          <span>Filter & Sort Products</span>
+          <i>▼</i>
+        </button>
+        <div class="filter-controls" id="filterControls">
+          <div class="filter-group">
+            <label class="filter-label" for="furnitureTypeFilter">Furniture Type</label>
+            <select class="filter-select" id="furnitureTypeFilter">
+              <option value="all">All Types</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label" for="colorFilter">Color</label>
+            <select class="filter-select" id="colorFilter">
+              <option value="all">All Colors</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Price Range</label>
+            <div class="price-range">
+              <input type="number" class="price-input" id="minPriceFilter" placeholder="Min">
+              <span>to</span>
+              <input type="number" class="price-input" id="maxPriceFilter" placeholder="Max">
+            </div>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label" for="sortSelect">Sort by</label>
+            <select class="filter-select" id="sortSelect">
+              <option value="relevance">Relevance</option>
+              <option value="price_low_high">Price: Low to High</option>
+              <option value="price_high_low">Price: High to Low</option>
+              <option value="name_asc">Name: A to Z</option>
+              <option value="name_desc">Name: Z to A</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button class="filter-btn reset-btn" id="resetFiltersBtn">Reset</button>
+            <button class="filter-btn apply-btn" id="applyFiltersBtn">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+      <div class="results-header">
+        <div>
+          <h2 class="results-title">Search Results</h2>
+          <span class="results-count" id="resultsCount">0 products found</span>
+        </div>
+      </div>
+      <div class="results-grid" id="results"></div>
+    </div>
+  </div>
+  <div class="recording-indicator" id="recordingIndicator">🎤 Listening...</div>
+  <div class="loader" id="loader"></div>
+  <div class="qr-popup-overlay" id="qrPopupOverlay">
+    <div class="qr-popup">
+      <button class="popup-close" aria-label="Close QR Popup">×</button>
+      <img id="qrPopupImage" src="" alt="QR Code for AR">
+    </div>
+  </div>
+  <footer class="footer" id="footer">
+    <div class="container">
+      <p class="footer-title">FurniFind</p>
+      <p class="footer-tagline">Smarter furniture discovery powered by design and technology.</p>
+      <p class="footer-links">
+        <a href="/feedback">Send Feedback</a> |
+        <a href="mailto:support@furnifind.com">Contact Support</a>
+      </p>
+      <p class="footer-copy">© 2025 FurniFind. All rights reserved.</p>
+    </div>
+  </footer>
+  <script>
+    const textInput = document.getElementById("textInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const micBtn = document.getElementById("micBtn");
+    const resultsDiv = document.getElementById("results");
+    const resultsCount = document.getElementById("resultsCount");
+    const resultsSection = document.getElementById("resultsSection");
+    const recordingIndicator = document.getElementById("recordingIndicator");
+    const loader = document.getElementById("loader");
+    const filterToggleBtn = document.getElementById("filterToggleBtn");
+    const filterControls = document.getElementById("filterControls");
+    const furnitureTypeFilter = document.getElementById("furnitureTypeFilter");
+    const colorFilter = document.getElementById("colorFilter");
+    const minPriceFilter = document.getElementById("minPriceFilter");
+    const maxPriceFilter = document.getElementById("maxPriceFilter");
+    const resetFiltersBtn = document.getElementById("resetFiltersBtn");
+    const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+    const sortSelect = document.getElementById("sortSelect");
+    const qrPopupOverlay = document.getElementById("qrPopupOverlay");
+    const qrPopupImage = document.getElementById("qrPopupImage");
+    const popupClose = document.querySelector(".popup-close");
+    const arModels = {
+      "001.024.52.jpg": { hasAR: true, modelFile: "001.024.52.glb", qrCode: "/static/qr_codes/001.024.52_qr.png" },
+      "002.287.05.jpg": { hasAR: true, modelFile: "002.287.05.glb", qrCode: "/static/qr_codes/002.287.05_qr.png" },
+      "002.392.33.jpg": { hasAR: true, modelFile: "002.392.33.glb", qrCode: "/static/qr_codes/002.392.33_qr.png" },
+      "002.566.80.jpg": { hasAR: true, modelFile: "002.566.80.glb", qrCode: "/static/qr_codes/002.566.80_qr.png" },
+      "003.188.81.jpg": { hasAR: true, modelFile: "003.188.81.glb", qrCode: "/static/qr_codes/003.188.81_qr.png" },
+      "090.319.12.jpg": { hasAR: true, modelFile: "090.319.12.glb", qrCode: "/static/qr_codes/090.319.12_qr.png" },
+      "102.963.60.jpg": { hasAR: true, modelFile: "102.963.60.glb", qrCode: "/static/qr_codes/102.963.60_qr.png" },
+      "190.024.38.jpg": { hasAR: true, modelFile: "190.024.38.glb", qrCode: "/static/qr_codes/190.024.38_qr.png" },
+      "190.265.47.jpg": { hasAR: true, modelFile: "190.265.47.glb", qrCode: "/static/qr_codes/190.265.47_qr.png" },
+      "202.479.82.jpg": { hasAR: true, modelFile: "202.479.82.glb", qrCode: "/static/qr_codes/202.479.82_qr.png" },
+      "202.500.50.jpg": { hasAR: true, modelFile: "202.500.50.glb", qrCode: "/static/qr_codes/202.500.50_qr.png" },
+      "202.743.48.jpg": { hasAR: true, modelFile: "202.743.48.glb", qrCode: "/static/qr_codes/202.743.48_qr.png" },
+      "390.612.76.jpg": { hasAR: true, modelFile: "390.612.76.glb", qrCode: "/static/qr_codes/390.612.76_qr.png" },
+      "500.803.15.jpg": { hasAR: true, modelFile: "500.803.15.glb", qrCode: "/static/qr_codes/500.803.15_qr.png" },
+      "802.312.28.jpg": { hasAR: true, modelFile: "802.318.28.glb", qrCode: "/static/qr_codes/802.312.28_qr.png" },
+      "802.480.21.jpg": { hasAR: true, modelFile: "802.480.21.glb", qrCode: "/static/qr_codes/802.480.21_qr.png" },
+      "802.845.18.jpg": { hasAR: true, modelFile: "802.845.18.glb", qrCode: "/static/qr_codes/802.845.18_qr.png" },
+      "891.300.17.jpg": { hasAR: true, modelFile: "891.300.17.glb", qrCode: "/static/qr_codes/891.300.17_qr.png" },
+      "001.165.95.jpg": { hasAR: true, modelFile: "001.165.95.glb", qrCode: "/static/qr_codes/001.165.95_qr.png" },
+      "002.290.12.jpg": { hasAR: true, modelFile: "002.290.12.glb", qrCode: "/static/qr_codes/002.290.12_qr.png" },
+      "002.456.44.jpg": { hasAR: true, modelFile: "002.456.44.glb", qrCode: "/static/qr_codes/002.456.44_qr.png" },
+      "002.612.95.jpg": { hasAR: true, modelFile: "002.612.95.glb", qrCode: "/static/qr_codes/002.612.95_qr.png" },
+      "002.809.39.jpg": { hasAR: true, modelFile: "002.809.39.glb", qrCode: "/static/qr_codes/002.809.39_qr.png" },
+      "091.283.58.jpg": { hasAR: true, modelFile: "091.283.58.glb", qrCode: "/static/qr_codes/091.283.58_qr.png" },
+      "099.031.08.jpg": { hasAR: true, modelFile: "099.031.08.glb", qrCode: "/static/qr_codes/099.031.08_qr.png" },
+      "103.006.54.jpg": { hasAR: true, modelFile: "103.006.54.glb", qrCode: "/static/qr_codes/103.006.54_qr.png" },
+      "202.608.36.jpg": { hasAR: true, modelFile: "202.608.36.glb", qrCode: "/static/qr_codes/202.608.36_qr.png" },
+      "202.758.14.jpg": { hasAR: true, modelFile: "202.758.14.glb", qrCode: "/static/qr_codes/202.758.14_qr.png" },
+      "291.335.61.jpg": { hasAR: true, modelFile: "291.335.61.glb", qrCode: "/static/qr_codes/291.335.61_qr.png" },
+      "501.928.22.jpg": { hasAR: true, modelFile: "501.928.22.glb", qrCode: "/static/qr_codes/501.928.22_qr.png" },
+      "502.427.37.jpg": { hasAR: true, modelFile: "502.427.37.glb", qrCode: "/static/qr_codes/502.427.37_qr.png" },
+      "502.688.50.jpg": { hasAR: true, modelFile: "502.688.50.glb", qrCode: "/static/qr_codes/502.688.50_qr.png" },
+      "591.553.30.jpg": { hasAR: true, modelFile: "591.553.30.glb", qrCode: "/static/qr_codes/591.553.30_qr.png" },
+      "702.135.93.jpg": { hasAR: true, modelFile: "702.135.93.glb", qrCode: "/static/qr_codes/702.135.93_qr.png" },
+      "703.233.51.jpg": { hasAR: true, modelFile: "703.233.51.glb", qrCode: "/static/qr_codes/703.233.51_qr.png" },
+      "790.575.26.jpg": { hasAR: true, modelFile: "790.575.26.glb", qrCode: "/static/qr_codes/790.575.26_qr.png" },
+      "801.033.44.jpg": { hasAR: true, modelFile: "801.033.44.glb", qrCode: "/static/qr_codes/801.033.44_qr.png" },
+      "802.970.21.jpg": { hasAR: true, modelFile: "802.970.21.glb", qrCode: "/static/qr_codes/802.970.21_qr.png" },
+      "001.530.69.jpg": { hasAR: true, modelFile: "001.530.69.glb", qrCode: "/static/qr_codes/001.530.69_qr.png" },
+      "002.110.88.jpg": { hasAR: true, modelFile: "002.110.88.glb", qrCode: "/static/qr_codes/002.110.88_qr.png" },
+      "090.066.63.jpg": { hasAR: true, modelFile: "090.066.63.glb", qrCode: "/static/qr_codes/090.066.63_qr.png" },
+      "101.168.49.jpg": { hasAR: true, modelFile: "101.168.49.glb", qrCode: "/static/qr_codes/101.168.49_qr.png" },
+      "102.191.78.jpg": { hasAR: true, modelFile: "102.191.78.glb", qrCode: "/static/qr_codes/102.191.78_qr.png" },
+      "190.310.06.jpg": { hasAR: true, modelFile: "190.310.06.glb", qrCode: "/static/qr_codes/190.310.06_qr.png" },
+      "201.150.38.jpg": { hasAR: true, modelFile: "201.150.38.glb", qrCode: "/static/qr_codes/201.150.38_qr.png" },
+      "202.396.80.jpg": { hasAR: true, modelFile: "202.396.80.glb", qrCode: "/static/qr_codes/202.396.80_qr.png" },
+      "202.800.33.jpg": { hasAR: true, modelFile: "202.800.33.glb", qrCode: "/static/qr_codes/202.800.33_qr.png" },
+      "301.165.51.jpg": { hasAR: true, modelFile: "301.165.51.glb", qrCode: "/static/qr_codes/301.165.51_qr.png" },
+      "302.625.28.jpg": { hasAR: true, modelFile: "302.625.28.glb", qrCode: "/static/qr_codes/302.625.28_qr.png" },
+      "303.270.68.jpg": { hasAR: true, modelFile: "303.270.68.glb", qrCode: "/static/qr_codes/303.270.68_qr.png" },
+      "390.067.94.jpg": { hasAR: true, modelFile: "390.067.94.glb", qrCode: "/static/qr_codes/390.067.94_qr.png" },
+      "402.177.95.jpg": { hasAR: true, modelFile: "402.177.95.glb", qrCode: "/static/qr_codes/402.177.95_qr.png" },
+      "602.178.22.jpg": { hasAR: true, modelFile: "602.178.22.glb", qrCode: "/static/qr_codes/602.178.22_qr.png" },
+      "690.335.45.jpg": { hasAR: true, modelFile: "690.335.45.glb", qrCode: "/static/qr_codes/690.335.45_qr.png" },
+      "701.032.50.jpg": { hasAR: true, modelFile: "701.032.50.glb", qrCode: "/static/qr_codes/701.032.50_qr.png" },
+      "799.019.69.jpg": { hasAR: true, modelFile: "799.019.69.glb", qrCode: "/static/qr_codes/799.019.69_qr.png" },
+      "902.642.18.jpg": { hasAR: true, modelFile: "902.642.18.glb", qrCode: "/static/qr_codes/902.642.18_qr.png" },
+      "002.729.20.jpg": { hasAR: true, modelFile: "002.729.20.glb", qrCode: "/static/qr_codes/002.729.20_qr.png" },
+      "091.292.30.jpg": { hasAR: true, modelFile: "091.292.30.glb", qrCode: "/static/qr_codes/091.292.30_qr.png" },
+      "190.526.21.jpg": { hasAR: true, modelFile: "190.526.21.glb", qrCode: "/static/qr_codes/190.526.21_qr.png" },
+      "290.486.62.jpg": { hasAR: true, modelFile: "290.486.62.glb", qrCode: "/static/qr_codes/290.486.62_qr.png" },
+      "391.109.84.jpg": { hasAR: true, modelFile: "391.109.84.glb", qrCode: "/static/qr_codes/391.109.84_qr.png" },
+      "391.504.42.jpg": { hasAR: true, modelFile: "391.504.42.glb", qrCode: "/static/qr_codes/391.504.42_qr.png" },
+      "691.292.32.jpg": { hasARream: true, modelFile: "691.292.32.glb", qrCode: "/static/qr_codes/691.292.32_qr.png" },
+      "702.450.56.jpg": { hasAR: true, modelFile: "702.450.56.glb", qrCode: "/static/qr_codes/702.450.56_qr.png" },
+      "802.788.57.jpg": { hasAR: true, modelFile: "802.788.57.glb", qrCode: "/static/qr_codes/802.788.57_qr.png" },
+      "890.203.25.jpg": { hasAR: true, modelFile: "890.203.25.glb", qrCode: "/static/qr_codes/890.203.25_qr.png" },
+      "902.651.09.jpg": { hasAR: true, modelFile: "902.651.09.glb", qrCode: "/static/qr_codes/902.651.09_qr.png" },
+      "903.007.25.jpg": { hasAR: true, modelFile: "903.007.25.glb", qrCode: "/static/qr_codes/903.007.25_qr.png" },
+      "002.382.00.jpg": { hasAR: true, modelFile: "002.382.00.glb", qrCode: "/static/qr_codes/002.382.00_qr.png" },
+      "002.998.25.jpg": { hasAR: true, modelFile: "002.998.25.glb", qrCode: "/static/qr_codes/002.998.25_qr.png" },
+      "091.195.18.jpg": { hasAR: true, modelFile: "091.195.18.glb", qrCode: "/static/qr_codes/091.195.18_qr.png" },
+      "102.016.73.jpg": { hasAR: true, modelFile: "102.016.73.glb", qrCode: "/static/qr_codes/102.016.73_qr.png" },
+      "102.397.13.jpg": { hasAR: true, modelFile: "102.397.13.glb", qrCode: "/static/qr_codes/102.397.13_qr.png" },
+      "102.976.56.jpg": { hasAR: true, modelFile: "102.976.56.glb", qrCode: "/static/qr_codes/102.976.56_qr.png" },
+      "190.117.77.jpg": { hasAR: true, modelFile: "190.117.77.glb", qrCode: "/static/qr_codes/190.117.77_qr.png" },
+      "201.571.08.jpg": { hasAR: true, modelFile: "201.571.08.glb", qrCode: "/static/qr_codes/201.571.08_qr.png" },
+      "202.047.51.jpg": { hasAR: true, modelFile: "202.047.51.glb", qrCode: "/static/qr_codes/202.047.51_qr.png" },
+      "202.214.25.jpg": { hasAR: true, modelFile: "202.214.25.glb", qrCode: "/static/qr_codes/202.214.25_qr.png" },
+      "290.007.16.jpg": { hasAR: true, modelFile: "290.007.16.glb", qrCode: "/static/qr_codes/290.007.16_qr.png" },
+      "302.397.12.jpg": { hasAR: true, modelFile: "302.397.12.glb", qrCode: "/static/qr_codes/302.397.12_qr.png" },
+      "302.608.07.jpg": { hasAR: true, modelFile: "302.608.07.glb", qrCode: "/static/qr_codes/302.608.07_qr.png" },
+      "402.972.40.jpg": { hasAR: true, modelFile: "402.972.40.glb", qrCode: "/static/qr_codes/402.972.40_qr.png" },
+      "503.069.89.jpg": { hasAR: true, modelFile: "503.069.89.glb", qrCode: "/static/qr_codes/503.069.89_qr.png" },
+      "691.335.97.jpg": { hasAR: true, modelFile: "691.335.97.glb", qrCode: "/static/qr_codes/691.335.97_qr.png" },
+      "702.902.23.jpg": { hasAR: true, modelFile: "702.902.23.glb", qrCode: "/static/qr_codes/702.902.23_qr.png" },
+      "791.407.00.jpg": { hasAR: true, modelFile: "791.407.00.glb", qrCode: "/static/qr_codes/791.407.00_qr.png" },
+      "802.170.72.jpg": { hasAR: true, modelFile: "802.170.72.glb", qrCode: "/static/qr_codes/802.170.72_qr.png" },
+      "802.213.52.jpg": { hasAR: true, modelFile: "802.213.52.glb", qrCode: "/static/qr_codes/802.213.52_qr.png" },
+      "802.622.53.jpg": { hasAR: true, modelFile: "802.622.53.glb", qrCode: "/static/qr_codes/802.622.53_qr.png" },
+      "802.806.76.jpg": { hasAR: true, modelFile: "802.806.76.glb", qrCode: "/static/qr_codes/802.806.76_qr.png" },
+      "990.062.82.jpg": { hasAR: true, modelFile: "990.062.82.glb", qrCode: "/static/qr_codes/990.062.82_qr.png" }
+    };
+    let currentQuery = "";
+    let currentSearchType = "text";
+    let isFilterCollapsed = false;
+    function showLoader() { if (loader) loader.style.display = "block"; }
+    function hideLoader() { if (loader) loader.style.display = "none"; }
+    if (filterToggleBtn && filterControls) {
+      filterToggleBtn.addEventListener("click", () => {
+        isFilterCollapsed = !isFilterCollapsed;
+        filterControls.style.display = isFilterCollapsed ? "none" : "grid";
+        filterToggleBtn.querySelector("i").textContent = isFilterCollapsed ? "▶" : "▼";
+      });
+    }
+    window.addEventListener("DOMContentLoaded", loadFilterOptions);
+    async function loadFilterOptions() {
+      try {
+        const response = await fetch("/filter_options");
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const filterOptions = await response.json();
+        if (furnitureTypeFilter) populateSelect(furnitureTypeFilter, filterOptions.furniture_types, "Furniture Type");
+        if (colorFilter) populateSelect(colorFilter, filterOptions.colors, "Color");
+        if (minPriceFilter && filterOptions.price_range) minPriceFilter.placeholder = `${filterOptions.price_range.min}`;
+        if (maxPriceFilter && filterOptions.price_range) maxPriceFilter.placeholder = `${filterOptions.price_range.max}`;
+      } catch (err) {
+        console.error("Error loading filter options:", err);
+      }
+    }
+    function populateSelect(selectElement, options, label) {
+      if (!selectElement) return;
+      selectElement.innerHTML = `<option value="all">All ${label}</option>`;
+      if (options && Array.isArray(options)) {
+        options.forEach(option => {
+          const optElement = document.createElement("option");
+          const value = typeof option === 'string' ? option.toLowerCase() : String(option);
+          const text = typeof option === 'string' ? option.charAt(0).toUpperCase() + option.slice(1) : String(option);
+          optElement.value = value;
+          optElement.textContent = text;
+          selectElement.appendChild(optElement);
+        });
+      }
+    }
+    function getFilterValues() {
+      return {
+        furniture_type: furnitureTypeFilter ? furnitureTypeFilter.value : "all",
+        color: colorFilter ? colorFilter.value : "all",
+        price_min: minPriceFilter ? minPriceFilter.value : "",
+        price_max: maxPriceFilter ? maxPriceFilter.value : "",
+        sort_by: sortSelect ? sortSelect.value : "relevance"
+      };
+    }
+    async function handleSearch(searchType, queryOverride = null) {
+      let query, endpoint, payloadBody, method = "POST", headers = { "Content-Type": "application/json" };
+      showLoader();
+      if (resultsDiv) resultsDiv.innerHTML = "";
+      if (resultsCount) resultsCount.textContent = "";
+      if (resultsSection) resultsSection.style.display = "none";
+      const filters = getFilterValues();
+      if (searchType === "text") {
+        query = queryOverride !== null ? queryOverride : (textInput ? textInput.value.trim() : "");
+        if (!query) {
+          if (resultsDiv) resultsDiv.innerHTML = "<p class='no-results'>Please enter a search term.</p>";
+          hideLoader();
+          if (resultsSection) resultsSection.style.display = "block";
+          return;
+        }
+        currentQuery = query;
+        currentSearchType = "text";
+        endpoint = "/search";
+        payloadBody = JSON.stringify({ query: currentQuery, ...filters });
+      } else {
+        console.error("Unknown search type:", searchType);
+        hideLoader();
+        return;
+      }
+      try {
+        const response = await fetch(endpoint, { method, headers, body: payloadBody });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        displayResults(data);
+      } catch (err) {
+        console.error(`${searchType} search error:`, err);
+        if (resultsDiv) resultsDiv.innerHTML = `<p class='no-results'>An error occurred: ${err.message}. Please try again.</p>`;
+      } finally {
+        hideLoader();
+        if (resultsSection) resultsSection.style.display = "block";
+        if (resultsDiv && resultsDiv.innerHTML && resultsSection) {
+          window.scrollTo({ top: resultsSection.offsetTop - 70, behavior: "smooth" });
+        }
+      }
+    }
+    if (searchBtn) searchBtn.addEventListener("click", () => handleSearch("text"));
+    if (textInput) textInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") handleSearch("text");
+    });
+    function displayResults(data) {
+      if (!resultsDiv || !resultsCount) return;
+      resultsDiv.innerHTML = "";
+      if (!data || !Array.isArray(data) || data.length === 0) {
+        resultsDiv.innerHTML = "<p class='no-results'>No results found.</p>";
+        resultsCount.textContent = "0 results";
+        return;
+      }
+      resultsCount.textContent = `${data.length} result${data.length === 1 ? "" : "s"} found`;
+      data.forEach(item => {
+        let imagePath = item.image_path || item.image || "";
+        if (imagePath && !imagePath.startsWith("/static/") && !imagePath.startsWith("http")) {
+          imagePath = `/static/${imagePath.replace(/^static\//, "")}`;
+        }
+        const imageName = imagePath.split("/").pop();
+        const arData = arModels[imageName] || {};
+        const hasAR = arData.hasAR || false;
+        const arQrCode = arData.qrCode || "";
+        const priceValue = item.price ? String(item.price).replace(/[^0-9]/g, "") : "";
+        const displayPrice = priceValue ? `Rs ${priceValue}` : "";
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${imagePath || "https://via.placeholder.com/150?text=No+Image"}"
+               alt="${item.product_name || "Search result"}"
+               class="product-image"
+               onerror="this.src='https://via.placeholder.com/150?text=No+Image'; this.alt='Image not found';">
+          <div class="product-info">
+            <h3 class="product-name">${item.product_name || "Unknown Product"}</h3>
+            <span class="product-price">${displayPrice}</span>
+            ${hasAR ? `<button class="ar-button visible" data-qr="${arQrCode}" onclick="viewInAR('${arQrCode}')">View in AR</button>` : ""}
+          </div>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+    function viewInAR(qrImagePath) {
+      if (qrPopupImage && qrPopupOverlay && qrImagePath) {
+        qrPopupImage.src = qrImagePath;
+        qrPopupOverlay.classList.add("active");
+      }
+    }
+    if (popupClose) {
+      popupClose.addEventListener("click", () => {
+        if (qrPopupOverlay) qrPopupOverlay.classList.remove("active");
+      });
+    }
+    if (qrPopupOverlay) {
+      qrPopupOverlay.addEventListener("click", (e) => {
+        if (e.target === qrPopupOverlay) qrPopupOverlay.classList.remove("active");
+      });
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && qrPopupOverlay?.classList.contains("active")) {
+        qrPopupOverlay.classList.remove("active");
+      }
+    });
+    if (applyFiltersBtn) {
+      applyFiltersBtn.addEventListener("click", () => {
+        if (currentSearchType === "text" && currentQuery) {
+          handleSearch("text", currentQuery);
+        } else {
+          if (resultsDiv) resultsDiv.innerHTML = "<p class='no-results'>Please perform a search to apply filters.</p>";
+          if (resultsCount) resultsCount.textContent = "";
+          if (resultsSection) resultsSection.style.display = "block";
+        }
+      });
+    }
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener("click", () => {
+        if (furnitureTypeFilter) furnitureTypeFilter.value = "all";
+        if (colorFilter) colorFilter.value = "all";
+        if (minPriceFilter) minPriceFilter.value = "";
+        if (maxPriceFilter) maxPriceFilter.value = "";
+        if (sortSelect) sortSelect.value = "relevance";
+        if (currentSearchType === "text" && currentQuery) {
+          handleSearch("text", currentQuery);
+        } else {
+          if (resultsDiv) resultsDiv.innerHTML = "<p class='no-results'>Filters reset. Perform a new search.</p>";
+          if (resultsCount) resultsCount.textContent = "";
+          if (resultsSection) resultsSection.style.display = "block";
+        }
+      });
+    }
+    if (sortSelect) {
+      sortSelect.addEventListener("change", () => {
+        if (currentSearchType === "text" && currentQuery) {
+          handleSearch("text", currentQuery);
+        }
+      });
+    }
+    let mediaRecorder, audioChunks = [];
+    if (micBtn && recordingIndicator) {
+      micBtn.addEventListener("click", toggleRecording);
+    }
+    async function toggleRecording() {
+      if (mediaRecorder?.state === "recording") {
+        mediaRecorder.stop();
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+        });
+        mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm;codecs=opus" });
+        audioChunks = [];
+        mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+        mediaRecorder.onstop = async () => {
+          micBtn.classList.remove("recording");
+          if (recordingIndicator) recordingIndicator.style.display = "none";
+          showLoader();
+          try {
+            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+            const formData = new FormData();
+            formData.append("audio_data", audioBlob, "recording.webm");
+            const response = await fetch("/voice_search", { method: "POST", body: formData });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            if (data.query && textInput) {
+              textInput.value = data.query;
+              currentQuery = data.query;
+              currentSearchType = "text";
+              await handleSearch("text", data.query);
+            } else {
+              throw new Error("Voice search response did not contain query.");
+            }
+          } catch (error) {
+            console.error("Voice search error:", error);
+            if (resultsDiv) resultsDiv.innerHTML = `<p class='no-results'>Voice search failed: ${error.message}</p>`;
+            if (resultsSection) resultsSection.style.display = "block";
+          } finally {
+            hideLoader();
+            if (resultsDiv && resultsDiv.innerHTML && resultsSection) {
+              window.scrollTo({ top: resultsSection.offsetTop - 70, behavior: "smooth" });
+            }
+            stream.getTracks().forEach(track => track.stop());
+          }
+        };
+        mediaRecorder.start();
+        micBtn.classList.add("recording");
+        if (recordingIndicator) recordingIndicator.style.display = "inline-block";
+        setTimeout(() => {
+          if (mediaRecorder?.state === "recording") mediaRecorder.stop();
+        }, 8000);
+      } catch (err) {
+        console.error("Error accessing microphone:", err);
+        let errorMsg = "Could not access microphone.";
+        if (err.name === "NotAllowedError") errorMsg = "Microphone access denied. Please allow permissions.";
+        else if (err.name === "NotFoundError") errorMsg = "No microphone found. Please connect one.";
+        if (resultsDiv) resultsDiv.innerHTML = `<p class='no-results'>${errorMsg}</p>`;
+        if (resultsSection) resultsSection.style.display = "block";
+        micBtn.classList.remove("recording");
+        if (recordingIndicator) recordingIndicator.style.display = "none";
+      }
+    }
+    (function animateFeatureBoxes() {
+      const boxes = document.querySelectorAll(".feature-box");
+      if (boxes.length) {
+        setInterval(() => {
+          boxes.forEach((box, i) => {
+            box.style.transform = `translateY(${Math.sin(Date.now() / 800 + i) * 6}px) scale(1.02)`;
+          });
+        }, 120);
+      }
+    })();
+    const footer = document.getElementById("footer");
+    function toggleFooterVisibility() {
+      if (!footer) return;
+      if (window.scrollY > 180 && (!resultsSection || resultsSection.style.display === "none")) {
+        footer.classList.add("footer-visible");
+      } else {
+        footer.classList.remove("footer-visible");
+      }
+    }
+    window.addEventListener("scroll", toggleFooterVisibility);
+    window.addEventListener("DOMContentLoaded", toggleFooterVisibility);
+  </script>
+</body>
+</html>
